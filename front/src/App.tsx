@@ -19,7 +19,8 @@ const tld = '.hodl';
 // Constants
 const TWITTER_HANDLE = '_buildspace';
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
-const CONTRACT_ADDRESS = '0x4f088e4aeb62ec260254850be255859d839f77db';
+const CONTRACT_ADDRESS = '0x98d115e898D84A4255b21B18958820E6e3c57d6b';
+const REVERSE_ADDRESS = '0x73D38666dF4F165189cb8124Be1Ac636a5bCe8b5';
 
 export type Record = {
   avatar: string;
@@ -56,6 +57,21 @@ const App = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account, chainId]);
 
+  const setReverse = async () => {
+    if (!records || !domain || !active) {
+      return;
+    }
+
+    try {
+      const signer = library.getSigner();
+      const contract = new ethers.Contract(REVERSE_ADDRESS, contractABI.reverseAbi, signer);
+      const tx = await contract.setReverse(domain);
+      await tx.wait();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const switchNetwork = async () => {
     if (account) {
       try {
@@ -65,6 +81,7 @@ const App = () => {
           [{ chainId: '0x13881' }] // Check networks.js for hexadecimal network ids
         );
       } catch (error: any) {
+        console.log(error);
         // This error code means that the chain we want has not been added to MetaMask
         // In this case we ask the user to add it to their MetaMask
         if (error.code === 4902) {
@@ -73,7 +90,7 @@ const App = () => {
               {
                 chainId: '0x13881',
                 chainName: 'Polygon Mumbai Testnet',
-                rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
+                rpcUrls: ['https://rpc-mumbai.matic.today'],
                 nativeCurrency: {
                   name: 'Mumbai Matic',
                   symbol: 'MATIC',
@@ -344,14 +361,21 @@ const App = () => {
             Search
           </button>
           {records ? (
-            <button className="cta-button mint-button" disabled={loading} onClick={updateDomain}>
-              Update
-            </button>
-          ) : mintPrice > 0 ? (
-            <button className="cta-button mint-button" disabled={loading} onClick={mintDomain}>
-              Mint for {mintPrice} $MATIC
-            </button>
-          ) : null}
+            <>
+              <button className="cta-button mint-button" disabled={loading} onClick={updateDomain}>
+                Update
+              </button>
+              <button className="cta-button mint-button" disabled={loading} onClick={setReverse}>
+                Set Reverse
+              </button>
+            </>
+          ) : (
+            mintPrice > 0 && (
+              <button className="cta-button mint-button" disabled={loading} onClick={mintDomain}>
+                Mint for {mintPrice} $MATIC
+              </button>
+            )
+          )}
         </div>
       </div>
     );
