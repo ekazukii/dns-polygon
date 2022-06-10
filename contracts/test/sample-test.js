@@ -148,4 +148,28 @@ describe('Domains', function () {
     const validEmojis = await contract.valid('💎GEM💎');
     expect(validEmojis).to.be.true;
   });
+
+  it('Should deploy the ReverseDNS contract', async function () {
+    [owner, other] = await hre.ethers.getSigners();
+
+    const reverseContractFactory = await hre.ethers.getContractFactory('ReverseDNS');
+
+    reverse = await reverseContractFactory.deploy(contract.address);
+    await reverse.deployed();
+  });
+
+  it('Should create a reverse record', async function () {
+    [owner, other] = await hre.ethers.getSigners();
+    const tx = await reverse.setReverse('a16z');
+    await tx.wait();
+
+    const res = await reverse.resolve(owner.address);
+    expect(res).to.eq('a16z');
+  });
+
+  it('Should not create a reverse record if not owned', async function () {
+    [owner, other] = await hre.ethers.getSigners();
+    const tx = reverse.connect(other).setReverse('a16z');
+    await expect(tx).to.be.reverted;
+  });
 });

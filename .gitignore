@@ -42,3 +42,4 @@ Thumbs.db
 /front/node_modules
 /contracts/node_modules
 /contracts/cache
+/contracts/artifacts
