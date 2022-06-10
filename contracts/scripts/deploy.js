@@ -8,7 +8,7 @@ const main = async () => {
   await reverseContract.deployed();
 
   console.log('Contract deployed to:', domainContract.address);
-  console.log('ReverseDNS deployed to:', domainContract.address);
+  console.log('ReverseDNS deployed to:', reverseContract.address);
 
   let txn = await domainContract.register('ekazuki', {
     value: hre.ethers.utils.parseEther('0.1')
