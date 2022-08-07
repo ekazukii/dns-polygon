@@ -7,7 +7,7 @@ Domain name service on the polygon network, mint your .hodl domain as an NFT ass
 ## Demo
 
 Mumbai tesnet contract address -> 0x4f088e4aeb62ec260254850be255859d839f77db  
-You can check the [demo webapp](https://hodl.ekazuki.fr) deployed on the testnet  
+You can check the [demo webapp](https://hns.ekazuki.fr) deployed on the testnet  
 You can browses minted NFTs on [opensea](https://testnets.opensea.io/collection/hodl-name-service-uczxjenft4)
 ## Features
 
