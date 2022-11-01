@@ -1,0 +1,7 @@
+contracts
+.env
+/front/node_modules
+/contracts/node_modules
+/contracts/cache
+/contracts/artifacts
+/contracts/build
